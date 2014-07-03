@@ -43,14 +43,10 @@
 #define OFFSET_NEAREST_DOOMSDAY_TO_SEP   2
 #define OFFSET_NEAREST_DOOMSDAY_TO_NOV   0
 
-
-
 int dayOfWeek (int doomsday, int leapYear, int month, int day);
 int findNearestDoomsday (int leapYear, int month, int day); // find the nearest DD
 int getWeekdayOffset (int dist);                            // find the weekday offset
 int wrapDays (int total);                                   // wrap days around
-
-
 
 int main (int argc, char *argv[]) {
    assert (dayOfWeek (THURSDAY,  FALSE,  4,  4) == THURSDAY);
@@ -83,30 +79,23 @@ int main (int argc, char *argv[]) {
 
    return EXIT_SUCCESS;
 }
-
-
  
-int dayOfWeek (int doomsday, int leapYear, int month, int day) {  
+int dayOfWeek (int doomsday, int leapYear, int month, int day) { 
+ 
    int dayOfWeek = 0;
    int distance = 0; 
    signed int offset = 0;
    
-   distance = findNearestDoomsday (leapYear, month, day);
-   
-   offset = getWeekdayOffset (distance);
-   
+   distance = findNearestDoomsday(leapYear, month, day);  
+   offset = getWeekdayOffset(distance);
    dayOfWeek = doomsday + offset;
-   
-   dayOfWeek = wrapDays (dayOfWeek);
-
-   return (dayOfWeek); 
+   dayOfWeek = wrapDays(dayOfWeek);
+   return(dayOfWeek); 
 }
 
-
-
 int getWeekdayOffset (int dist) {  
-   int count = 0;
 
+   int count = 0;
    if (dist <= -DAYS_PER_WEEK) {
       count = dist % DAYS_PER_WEEK;
    } else if (dist >= DAYS_PER_WEEK) {
@@ -114,41 +103,32 @@ int getWeekdayOffset (int dist) {
    } else {
       count = dist;
    }
-   
    return (count);
 }
 
-
-
 int findNearestDoomsday (int leapYear, int month, int day) {
+
    int nearestDoomsday;
 
    if (month >= DOOMSDAY_START && month % 2 == 0) { // if month is 4,6,8,10,12    
       nearestDoomsday = month;                      // the doomsday is the month
       nearestDoomsday = day - nearestDoomsday;   
    }
-
    if (month >= DOOMSDAY_START && month % 2 != 0) {  // if month is 5,7,9,11
-   
       if (month == 5) { // count to the last doomsday of april
          nearestDoomsday = day + OFFSET_NEAREST_DOOMSDAY_TO_MAY;
       }
-
       if (month == 7) { // count to the last doomsday of june
          nearestDoomsday = day + OFFSET_NEAREST_DOOMSDAY_TO_JUL;
       }
-
       if (month == 9) { // count to the last doomsday of august
          nearestDoomsday = day + OFFSET_NEAREST_DOOMSDAY_TO_SEP;  
       }
-
       if (month == 11) { // count to the last doomsday of october
          nearestDoomsday = day + OFFSET_NEAREST_DOOMSDAY_TO_NOV;  
       }
    }
-
    if (month == 1) {            // if the month is 1    
-
       if (leapYear == TRUE ) {  // count to the 4th of april
          nearestDoomsday = day - DAYS_IN_JAN  - DAYS_IN_FEB_LEAP - 
                            DAYS_IN_MARCH - FIRST_DOOMSDAY_OF_APR;
@@ -157,7 +137,6 @@ int findNearestDoomsday (int leapYear, int month, int day) {
                            DAYS_IN_MARCH - FIRST_DOOMSDAY_OF_APR;
       }
    }
-
    if (month == 2) {            // if the month is 2    
 
       if (leapYear == TRUE ) {  // count to the 4th of april
@@ -168,26 +147,20 @@ int findNearestDoomsday (int leapYear, int month, int day) {
                            FIRST_DOOMSDAY_OF_APR;
       }
    }
-
    if (month == 3) {            // if the month is 3  
       nearestDoomsday = day - DAYS_IN_MARCH - FIRST_DOOMSDAY_OF_APR; 
    }                           // count to the 4th of april
-   
    return (nearestDoomsday);
 }
 
-
-
 int wrapDays (int total) {
-   int weekday = total;
 
+   int weekday = total;
    if (total > MAPPED_DAYS) {  // wrap around @ 6 & 0
       weekday = weekday - DAYS_PER_WEEK;
    } 
-
    if (weekday < 0) {
       weekday = DAYS_PER_WEEK + weekday;
    }
-   
    return (weekday);
 }
